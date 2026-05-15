@@ -74,47 +74,28 @@ console.log("CLIENT_URL:", process.env.CLIENT_URL);
 console.log("MONGODB_URI exists:", !!process.env.MONGODB_URI);
 
 /* -------------------- Middleware -------------------- */
-// Render (and most PaaS hosts) terminate TLS at a proxy in front of Node.
-// We need to trust the proxy so secure cookies and req.protocol work correctly.
-app.set("trust proxy", 1);
-
-// Build allowed-origins list from env + sensible defaults.
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "http://localhost:3000",
-].filter(Boolean);
-
+/* -------------------- Middleware -------------------- */
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no Origin header (curl, server-to-server, mobile webviews).
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      // Allow any subdomain of onrender.com / vercel.app / netlify.app for convenience.
-      if (/\.(onrender\.com|vercel\.app|netlify\.app)$/i.test(new URL(origin).hostname)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS: origin not allowed: ${origin}`), false);
-    },
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:5173",
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );
 
 app.use(express.json());
 
-const isProduction = process.env.NODE_ENV === "production";
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      // In production behind HTTPS we need Secure + SameSite=None so the
-      // cookie travels cross-site between the frontend and this API.
-      secure: isProduction,
+      secure: false,
       httpOnly: true,
-      sameSite: isProduction ? "none" : "lax",
     },
   })
 );
@@ -1047,12 +1028,7 @@ app.post("/admin/notify", async (req, res) => {
 async function startServer() {
   try {
     if (!MONGO_URI) {
-      console.error(
-        "❌ MONGODB_URI environment variable is not set.\n" +
-        "   Local: put it in .env\n" +
-        "   Render: add it under your service's Environment tab.\n"
-      );
-      process.exit(1);
+      throw new Error("MONGODB_URI is missing in .env");
     }
 
     console.log("🔌 Connecting to MongoDB...");
@@ -1063,13 +1039,11 @@ async function startServer() {
 
     console.log("✅ Database Connected");
 
-    // Bind to 0.0.0.0 so the server is reachable from outside the container
-    // (Render, Docker, Heroku, etc. all require this — localhost-only won't work).
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (err) {
-    console.error("❌ Startup Error:", err);
+    console.error("❌ DB Connection Error:", err);
     process.exit(1);
   }
 }
