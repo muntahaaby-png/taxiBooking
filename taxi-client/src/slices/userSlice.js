@@ -27,7 +27,7 @@ export const newUserThunk = createAsyncThunk(
   "user/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await fetch("http://localhost:7500/userRegister", {
+      const res = await fetch("https://taxibooking-4-z6lw.onrender.com/userRegister", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
@@ -45,7 +45,7 @@ export const loginThunk = createAsyncThunk(
   "user/login",
   async ({ email, pwd }, { rejectWithValue }) => {
     try {
-      const res = await fetch("http://localhost:7500/userLogin", {
+      const res = await fetch("https://taxibooking-4-z6lw.onrender.com/userLogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userEmail: email, userPassword: pwd })
