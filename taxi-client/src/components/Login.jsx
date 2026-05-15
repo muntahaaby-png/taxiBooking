@@ -110,7 +110,7 @@ export default function Login() {
             <div style={{ backgroundColor: "#9cb4e2", borderRadius: 20, padding: "10px 16px" }}>
               <div className="d-flex align-items-center">
                 <span style={{ marginRight: 10 }}>👤</span>
-                <input type="email" className="form-control border-0" style={{ backgroundColor: "transparent", boxShadow: "none" }} placeholder={t("emailAddress")} value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input data-testid="login-email" type="email" className="form-control border-0" style={{ backgroundColor: "transparent", boxShadow: "none" }} placeholder={t("emailAddress")} value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
           </FormGroup>
@@ -119,7 +119,7 @@ export default function Login() {
             <div style={{ backgroundColor: "#9cb4e2", borderRadius: 20, padding: "10px 16px" }}>
               <div className="d-flex align-items-center">
                 <span style={{ marginRight: 10 }}>🔒</span>
-                <input type={showPwd ? "text" : "password"} className="form-control border-0" style={{ backgroundColor: "transparent", boxShadow: "none" }} placeholder={t("password")} value={pwd} onChange={(e) => setPwd(e.target.value)} />
+                <input data-testid="login-password" type={showPwd ? "text" : "password"} className="form-control border-0" style={{ backgroundColor: "transparent", boxShadow: "none" }} placeholder={t("password")} value={pwd} onChange={(e) => setPwd(e.target.value)} />
                 <span onClick={() => setShowPwd((v) => !v)} style={{ cursor: "pointer", marginLeft: 8, fontSize: "1.1rem", userSelect: "none", color: "#444" }}>
                   
                 </span>
@@ -145,7 +145,7 @@ export default function Login() {
 
           <Row className="mb-3">
             <Col className="text-center">
-              <button type="submit" disabled={loading} style={{ backgroundColor: loading ? "#aaa" : accentColor, color: "#fff", border: "none", borderRadius: 30, padding: "11px 70px", fontSize: "1.2rem", fontWeight: "bold", cursor: loading ? "not-allowed" : "pointer", transition: "background-color 0.3s" }}>
+              <button data-testid="login-submit" type="submit" disabled={loading} style={{ backgroundColor: loading ? "#aaa" : accentColor, color: "#fff", border: "none", borderRadius: 30, padding: "11px 70px", fontSize: "1.2rem", fontWeight: "bold", cursor: loading ? "not-allowed" : "pointer", transition: "background-color 0.3s" }}>
                 {loading ? t("loggingIn") : t("login")}
               </button>
             </Col>

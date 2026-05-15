@@ -1,0 +1,204 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Login > Should match the Snapshot 1`] = `
+<div>
+  <div
+    class="d-flex justify-content-center container-fluid"
+    style="min-height: calc(100vh - 82px); align-items: center;"
+  >
+    <div
+      class="container"
+      style="max-width: 480px; padding-top: 32px; padding-bottom: 40px;"
+    >
+      <div
+        class="mb-4 row"
+      >
+        <div
+          class="text-center col"
+        >
+          <h1
+            style="color: rgb(75, 0, 130); font-weight: bold; font-size: 2.3rem; transition: color 0.3s;"
+          >
+            Login
+          </h1>
+        </div>
+      </div>
+      <div
+        class="mb-4 row"
+      >
+        <div
+          class="d-flex justify-content-center col"
+        >
+          <div
+            style="display: inline-flex; border-radius: 40px; overflow: hidden;"
+          >
+            <button
+              style="border: medium; padding: 10px 30px; background-color: rgb(75, 0, 130); color: rgb(255, 255, 255); font-size: 1.05rem; font-weight: bold; cursor: default; transition: background-color 0.3s;"
+              type="button"
+            >
+              Login
+            </button>
+            <button
+              style="border: medium; padding: 10px 30px; background-color: rgb(192, 180, 255); color: rgb(255, 255, 255); font-size: 1.05rem; font-weight: bold; cursor: pointer;"
+              type="button"
+            >
+              Sign up
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mb-4 row"
+      >
+        <div
+          class="d-flex justify-content-center col"
+        >
+          <div
+            style="display: inline-flex; background-color: rgb(240, 232, 255); border-radius: 40px; padding: 4px; gap: 4px;"
+          >
+            <label
+              style="display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 36px; cursor: pointer; font-weight: 600; font-size: 0.95rem; background-color: rgb(75, 0, 130); color: rgb(255, 255, 255); transition: all 0.2s; user-select: none;"
+            >
+              <input
+                checked=""
+                name="userType"
+                style="display: none;"
+                type="radio"
+                value="user"
+              />
+              👤 User
+            </label>
+            <label
+              style="display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 36px; cursor: pointer; font-weight: 600; font-size: 0.95rem; background-color: transparent; color: rgb(85, 85, 85); transition: all 0.2s; user-select: none;"
+            >
+              <input
+                name="userType"
+                style="display: none;"
+                type="radio"
+                value="driver"
+              />
+              🚗 Taxi Driver
+            </label>
+            <label
+              style="display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 36px; cursor: pointer; font-weight: 600; font-size: 0.95rem; background-color: transparent; color: rgb(85, 85, 85); transition: all 0.2s; user-select: none;"
+            >
+              <input
+                name="userType"
+                style="display: none;"
+                type="radio"
+                value="admin"
+              />
+              🛡️ Admin
+            </label>
+          </div>
+        </div>
+      </div>
+      <form>
+        <div
+          class="mb-3 mb-3"
+        >
+          <div
+            style="background-color: rgb(156, 180, 226); border-radius: 20px; padding: 10px 16px;"
+          >
+            <div
+              class="d-flex align-items-center"
+            >
+              <span
+                style="margin-right: 10px;"
+              >
+                👤
+              </span>
+              <input
+                class="form-control border-0"
+                data-testid="login-email"
+                placeholder="Email Address"
+                style="background-color: transparent; box-shadow: none;"
+                type="email"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="mb-2 mb-3"
+        >
+          <div
+            style="background-color: rgb(156, 180, 226); border-radius: 20px; padding: 10px 16px;"
+          >
+            <div
+              class="d-flex align-items-center"
+            >
+              <span
+                style="margin-right: 10px;"
+              >
+                🔒
+              </span>
+              <input
+                class="form-control border-0"
+                data-testid="login-password"
+                placeholder="Password"
+                style="background-color: transparent; box-shadow: none;"
+                type="password"
+                value=""
+              />
+              <span
+                style="cursor: pointer; margin-left: 8px; font-size: 1.1rem; user-select: none; color: rgb(68, 68, 68);"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="mb-3 row"
+        >
+          <div
+            class="text-start col"
+          >
+            <a
+              data-discover="true"
+              href="/forgotPassword"
+              style="color: rgb(11, 92, 99); font-weight: bold; text-decoration: none;"
+            >
+              Forgot Password?
+            </a>
+          </div>
+        </div>
+        <div
+          class="mb-3 row"
+        >
+          <div
+            class="text-center col"
+          >
+            <button
+              data-testid="login-submit"
+              style="background-color: rgb(75, 0, 130); color: rgb(255, 255, 255); border: medium; border-radius: 30px; padding: 11px 70px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: background-color 0.3s;"
+              type="submit"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+        <div
+          class="row"
+        >
+          <div
+            class="text-center col"
+          >
+            <span
+              style="color: rgb(21, 91, 106); font-size: 1rem;"
+            >
+              New here? 
+            </span>
+            <a
+              data-discover="true"
+              href="/register"
+              style="color: red; font-weight: bold; text-decoration: none;"
+            >
+              Sign up
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+`;

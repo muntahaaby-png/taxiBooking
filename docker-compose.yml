@@ -1,0 +1,48 @@
+# docker-compose.yml
+#
+# Spins up the full Taxi app:
+#   - taxi-server  (Node/Express + Mongoose)  on host port 7500
+#   - taxi-client  (Vite build served by nginx) on host port 5173
+#
+# Usage:
+#   docker compose up --build           # build + start, attached
+#   docker compose up -d --build        # build + start, detached
+#   docker compose down                 # stop and remove
+#   docker compose logs -f taxi-server  # tail server logs
+#
+# The server reads its config from taxi-server/.env. The client uses the
+# already-hardcoded http://localhost:7500 base URL in its source, which works
+# because we publish the server's container port 7500 on the host as 7500.
+
+services:
+  taxi-server:
+    build:
+      context: ./taxi-server
+    container_name: taxi-server
+    ports:
+      - "7500:7500"
+    env_file:
+      - ./taxi-server/.env
+    # Override CLIENT_URL so the server's CORS allow-list matches the nginx
+    # container we expose at http://localhost:5173 below.
+    environment:
+      - CLIENT_URL=http://localhost:5173
+      - NODE_ENV=production
+    volumes:
+      # Persist uploaded files (driver licenses, photos) across container
+      # restarts. Without this, every restart loses everything in /app/uploads.
+      - taxi-uploads:/app/uploads
+    restart: unless-stopped
+
+  taxi-client:
+    build:
+      context: ./taxi-client
+    container_name: taxi-client
+    ports:
+      - "5173:80"
+    depends_on:
+      - taxi-server
+    restart: unless-stopped
+
+volumes:
+  taxi-uploads:
