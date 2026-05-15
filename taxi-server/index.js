@@ -24,7 +24,7 @@ import paymentModel from "./models/paymentModel.js";
 import notificationModel from "./models/notificationModel.js";
 import ChatModel from "./models/ChatModel.js";
 
-/* -------------------- Setup -------------------- */
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -59,7 +59,7 @@ const uploadImage = multer({ storage, fileFilter: imageFilter });
 
 const app = express();
 
-/* ---- Notification helper ---- */
+
 async function pushNotification({ recipientEmail, type, title, body = "", meta = {} }) {
   try {
     await notificationModel.create({ recipientEmail, type, title, body, meta });
@@ -68,20 +68,26 @@ async function pushNotification({ recipientEmail, type, title, body = "", meta =
   }
 }
 
-/* -------------------- Debug env -------------------- */
 console.log("PORT:", process.env.PORT);
 console.log("CLIENT_URL:", process.env.CLIENT_URL);
 console.log("MONGODB_URI exists:", !!process.env.MONGODB_URI);
 
-/* -------------------- Middleware -------------------- */
-/* -------------------- Middleware -------------------- */
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_URL || "http://localhost:5173",
-      "http://localhost:5173",
-      "http://localhost:3000",
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      if (/\.(onrender\.com|vercel\.app|netlify\.app)$/i.test(new URL(origin).hostname)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS: origin not allowed: ${origin}`), false);
+    },
     credentials: true,
   })
 );
@@ -100,16 +106,16 @@ app.use(
   })
 );
 
-/* -------------------- Static Files -------------------- */
+
 app.use("/uploads", express.static(uploadsDir));
 
-/* -------------------- Routes -------------------- */
+
 app.use(authRoutes);
 app.use(paymentRoutes);
 app.use("/api/drivers", driverRoutes);
 app.use("/chat", chatRoutes);
 
-/* -------------------- User Register -------------------- */
+
 app.post("/userRegister", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -152,7 +158,7 @@ app.post("/userRegister", async (req, res) => {
   }
 });
 
-/* -------------------- User Login -------------------- */
+
 app.post("/userLogin", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -199,7 +205,6 @@ app.post("/userLogin", async (req, res) => {
   }
 });
 
-/* -------------------- Driver Register -------------------- */
 app.post(
   "/driverRegister",
   upload.fields([
@@ -246,7 +251,7 @@ app.post(
   }
 );
 
-/* -------------------- Driver Login -------------------- */
+
 app.post("/driverLogin", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -300,7 +305,7 @@ app.post("/driverLogin", async (req, res) => {
 
 
 
-/* -------------------- Admin Login -------------------- */
+
 app.post("/adminLogin", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -351,7 +356,6 @@ app.post("/adminLogin", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Get All Drivers -------------------- */
 app.get("/admin/drivers", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -365,7 +369,6 @@ app.get("/admin/drivers", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Delete Driver -------------------- */
 app.delete("/admin/drivers/:driverId", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -390,7 +393,7 @@ app.delete("/admin/drivers/:driverId", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Suspend / Reinstate Driver -------------------- */
+
 app.patch("/admin/drivers/:driverId/suspend", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -527,7 +530,6 @@ app.post("/confirmBooking", async (req, res) => {
   }
 });
 
-/* -------------------- Process Payment -------------------- */
 app.post("/processPayment", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -554,7 +556,7 @@ app.post("/processPayment", async (req, res) => {
   }
 });
 
-/* -------------------- Send Feedback -------------------- */
+
 app.post("/sendFeedback", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1) {
@@ -583,7 +585,7 @@ app.post("/sendFeedback", async (req, res) => {
   }
 });
 
-/* -------------------- Get All Bookings for a Participant (email) -------------------- */
+
 app.get("/bookings/user/:email", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -599,7 +601,7 @@ app.get("/bookings/user/:email", async (req, res) => {
   }
 });
 
-/* -------------------- Mark Booking as Complete -------------------- */
+
 app.patch("/bookings/:bookingId/complete", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -631,7 +633,7 @@ app.patch("/bookings/:bookingId/complete", async (req, res) => {
   }
 });
 
-/* -------------------- Pending Payment Bookings for a Participant -------------------- */
+
 app.get("/bookings/pending-payment/:email", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -673,7 +675,7 @@ app.get("/trips/owner/:userId", async (req, res) => {
   }
 });
 
-/* -------------------- Driver: Available Bookings -------------------- */
+
 app.get("/bookings/available", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -689,7 +691,7 @@ app.get("/bookings/available", async (req, res) => {
   }
 });
 
-/* -------------------- Driver: Accept Booking -------------------- */
+
 app.patch("/bookings/accept/:bookingId", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -804,7 +806,7 @@ app.patch("/driver/location/:driverId", async (req, res) => {
   }
 });
 
-/* -------------------- Driver: Get Location -------------------- */
+
 app.get("/driver/location/:driverId", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -852,7 +854,7 @@ app.get("/admin/reports", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Flagged Drivers (>10 one-star reviews) -------------------- */
+
 app.get("/admin/flagged-drivers", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -876,7 +878,7 @@ app.get("/admin/flagged-drivers", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Driver Feedback -------------------- */
+
 app.get("/admin/driver-feedback/:driverId", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -903,7 +905,7 @@ app.patch("/chat/read/:user1/:user2", async (req, res) => {
   }
 });
 
-/* -------------------- User: Update Online Status -------------------- */
+
 app.patch("/users/online/:userId", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
@@ -990,7 +992,7 @@ app.delete("/notifications/clear/:email", async (req, res) => {
   }
 });
 
-/* -------------------- Admin: Send Custom Notification -------------------- */
+
 app.post("/admin/notify", async (req, res) => {
   try {
     if (mongoose.connection.readyState !== 1)
