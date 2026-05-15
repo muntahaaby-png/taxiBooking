@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:7500";
+const BASE_URL = "https://taxibooking-4-z6lw.onrender.com";
 const SESSION_KEY = "tb_driver_session";
 
 function loadSession() {
