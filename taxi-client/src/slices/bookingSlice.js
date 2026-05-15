@@ -5,7 +5,7 @@ export const confirmBookingThunk = createAsyncThunk(
   "booking/confirmBooking",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:7500/confirmBooking", data);
+      const res = await axios.post("https://taxibooking-4-z6lw.onrender.com/confirmBooking", data);
       return res.data;
     } catch (err) {
       return rejectWithValue(
